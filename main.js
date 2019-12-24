@@ -84,69 +84,107 @@ function main() {
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
     // adapter.config:
-    adapter.log.info("site id" + adapter.config.siteid);
+    adapter.log.info("site id: " + adapter.config.siteid);
     adapter.log.info("key: " + adapter.config.apikey);
 
 
-    if(!adapter.config.siteid || !adapter.config.apikey) {
+    if((!adapter.config.siteid) || (!adapter.config.apikey)) {
         adapter.log.error("siteid or api key not set")
-    }
+    } else {
+        adapter.log.debug('remote request');
 
-    else {
-            adapter.log.debug('remote request');
+        var siteid = adapter.config.siteid;
+        var apikey = adapter.config.apikey;
+        var resource = "overview";
 
-            var siteid = adapter.config.siteid;
-            var apikey = adapter.config.apikey;
-            var resouce = "overview";
+        var url = "https://monitoringapi.solaredge.com/site/"+siteid+"/"+resource+".json?api_key="+apikey;
+        adapter.log.info("request url: "+url);
 
-            var url = "https://monitoringapi.solaredge.com/site/"+siteid+"/"+resouce+".json?api_key="+apikey;
-            adapter.log.info("request url: ".url);
+        request(
+            {
+                url: url, // "https://gw02.ext.ffmuc.net/nodelist.json"
+                json: true
+            },
+            function (error, response, content) {
+                adapter.log.debug('remote request done');
 
-            request(
-                {
-                    url: url, // "https://gw02.ext.ffmuc.net/nodelist.json"
-                    json: true
-                },
-                function (error, response, content) {
-                    adapter.log.debug('remote request done');
+                if (!error && response.statusCode == 200) {
+                    if (content) {
+                        var overview = content.overview;
 
-                    if (!error && response.statusCode == 200) {
-
-                        if (content) {
-                            var overview = content.overview;
-
-                            var callback = function(val){
-                                //
-                            }
-
-                            adapter.createState('', "last update time", 'lastUpdateTime', {
-                                name: "lastUpdateTime",
-                                def: overview.lastUpdateTime,
-                                type: 'string',
-                                read: 'true',
-                                write: 'false',
-                                role: 'value',
-                                desc: 'Last update from inverter'
-                            }, callback);
-
-                            adapter.createState('', "current power", 'currentPower', {
-                                name: "currentPower",
-                                def: overview.currentPower.power,
-                                type: 'number',
-                                read: 'true',
-                                write: 'false',
-                                role: 'value',
-                                desc: 'current power in W'
-                            }, callback);
-
-                        } else {
-                            adapter.log.warn('Response has no valid content. Check your data and try again.');
+                        var callback = function(val){
+                            //
                         }
+
+                        // last update time
+                        adapter.createState('', siteid, 'lastUpdateTime', {
+                            name: "lastUpdateTime",
+                            def: overview.lastUpdateTime,
+                            type: 'string',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'Last update from inverter'
+                        }, callback);
+
+                        adapter.createState('', siteid, 'currentPower', {
+                            name: "currentPower",
+                            def: overview.currentPower.power,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'current power in W'
+                        }, callback);
+
+                        adapter.createState('', siteid, 'lifeTimeData', {
+                            name: "lifeTimeData",
+                            def: overview.lifeTimeData.energy,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'Lifetime energy in Wh'
+                        }, callback);
+
+                        adapter.createState('', siteid, 'lastYearData', {
+                            name: "lastYearData",
+                            def: overview.lastYearData.energy,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'last year energy in Wh'
+                        }, callback);
+
+                        adapter.createState('', siteid, 'lastMonthData', {
+                            name: "lastMonthData",
+                            def: overview.lastMonthData.energy,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'last month energy in Wh'
+                        }, callback);
+
+                        adapter.createState('', siteid, 'lastDayData', {
+                            name: "lastDayData",
+                            def: overview.lastDayData.energy,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'last day energy in Wh'
+                        }, callback);
+
                     } else {
-                        adapter.log.warn(error);
+                        adapter.log.warn('Response has no valid content. Check your data and try again. '+response.statusCode);
                     }
+                } else {
+                    adapter.log.warn(error);
                 }
-            );
+            }
+        );
     }
 
 
