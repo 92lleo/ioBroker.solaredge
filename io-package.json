@@ -1,0 +1,79 @@
+{
+    "common": {
+        "name": "solaredge",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Solaredge Monitoring",
+        "titleLang": {
+            "en": "Solaredge Monitoring",
+            "de": "Solaredge-Überwachung",
+            "ru": "Мониторинг Solaredge",
+            "pt": "Solaredge Monitoring",
+            "nl": "Solaredge Monitoring",
+            "fr": "Surveillance de Solaredge",
+            "it": "Monitoraggio di Solaredge",
+            "es": "Monitoreo Solaredge",
+            "pl": "Monitorowanie Solaredge",
+            "zh-cn": "Solaredge监控"
+        },
+        "desc": {
+            "en": "Get data from solaredge monitoring portal",
+            "de": "Rufen Sie Daten vom Solaredge-Überwachungsportal ab",
+            "ru": "Получить данные с портала мониторинга Solaredge",
+            "pt": "Obter dados do portal de monitoramento solaredge",
+            "nl": "Gegevens ophalen uit de portal voor solaredge-monitoring",
+            "fr": "Obtenez les données du portail de surveillance Solaredge",
+            "it": "Ottieni dati dal portale di monitoraggio di Solaredge",
+            "es": "Obtenga datos del portal de monitoreo de solaredge",
+            "pl": "Uzyskaj dane z portalu monitorowania Solaredge",
+            "zh-cn": "从solaredge监控门户获取数据"
+        },
+        "authors": [
+            "92lleo <leonhard@kuenzler.io>"
+        ],
+        "keywords": [
+            "solaredge",
+            "energy",
+            "power",
+            "api",
+            "monitoring"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "solaredge.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/92lleo/ioBroker.solaredge/master/admin/solaredge.png",
+        "readme": "https://github.com/92lleo/ioBroker.solaredge/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "schedule",
+        "schedule": "*/5 * * * *",
+        "type": "energy",
+        "compact": true,
+        "materialize": true,
+        "dependencies": [
+            {
+                "js-controller": ">=1.4.2"
+            }
+        ]
+    },
+    "native": {
+        "option1": true,
+        "option2": "42"
+    },
+    "objects": [],
+    "instanceObjects": []
+}
