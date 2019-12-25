@@ -45,15 +45,16 @@ function startAdapter(options) {
 
 function main() {
 
-    adapter.log.info("site id: " + adapter.config.siteid);
-    adapter.log.info("key: " + adapter.config.apikey);
+	var siteid = adapter.config.siteid;
+    var apikey = adapter.config.apikey;
+
+    adapter.log.info("site id: " + siteid);
+    adapter.log.info("api key: " + (apikey ? (apikey.substring(0, 4) + "...") : "not set"));
 
     // adapter only works with siteid and api key set
-    if((!adapter.config.siteid) || (!adapter.config.apikey)) {
+    if((!siteid) || (!apikey)) {
         adapter.log.error("siteid or api key not set")
     } else {
-        var siteid = adapter.config.siteid;
-        var apikey = adapter.config.apikey;
         var resource = "overview";
 
         // for some other resources the url itself might change
