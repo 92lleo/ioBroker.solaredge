@@ -59,7 +59,6 @@ function main() {
 
         // for some other resources the url itself might change
         var url = "https://monitoringapi.solaredge.com/site/"+siteid+"/"+resource+".json?api_key="+apikey;
-        adapter.log.info("request url: "+url);
 
         request({  url: url,
                    json: true },
