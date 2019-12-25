@@ -65,11 +65,12 @@ function main() {
 	            function (error, response, content) {
 	                if (!error && response.statusCode == 200) {
 	                    if (content) {
+
+                            var callback = function(val){}
+
 	                        var overview = content.overview;
 
-	                        var callback = function(val){
-	                            //
-	                        }
+	                        adapter.log.info("Current power for "+siteid+": "+overview.currentPower.power+" W");	
 
 	                        // last update time
 	                        adapter.createState('', siteid, 'lastUpdateTime', {
@@ -139,12 +140,14 @@ function main() {
 	                    adapter.log.warn(error);
 	                }
 
+	                adapter.log.info("Done, stopping...");
 	                adapter.stop();
 	            });
     }
 
     // (force) stop adapter after 15s
     setTimeout(function() {
+        adapter.log.warn("Timeout, stopping...");
         adapter.stop();
     }, 15000);
 }
