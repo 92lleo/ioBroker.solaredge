@@ -17,11 +17,20 @@
 Get data from solaredge monitoring portal.
 Currently, only the /overview data point is used to get the current power and day/month/year/lifetime energy readings.
 
+You can also enable modbus on your solaredge device if it's a newer one and read the data directly. 
+
+You need your site id and api key to use this adapter. To get these, go to https://monitoring.solaredge.com  
+site id: log in, site id is the "ID" on the right, eg 12345  
+api key: log in, go to the admin settings and enable api access there. If you don't see admin settings, send a mail to solaredge to enable admin for your account.
+
 Roadmap:
 * Add power and energy details
 * Add other devices than inverters
 
 ## Changelog
+
+### 0.1.0
+* (92lleo) first beta release. overview data from inteverters are available
 
 ### 0.0.1
 * (92lleo) initial release
