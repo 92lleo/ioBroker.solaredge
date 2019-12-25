@@ -1,15 +1,15 @@
 "use strict";
 
 /*
+ * Solaredge Monitoring
+ * github.com/92lleo/ioBroker.solaredge
+ *
+ * (c) 2019 Leonhard Kuenzler (MIT)
+ *
  * Created with @iobroker/create-adapter v1.18.0
  */
 
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
 const utils = require("@iobroker/adapter-core");
-
-// Load your modules here, e.g.:
-// const fs = require("fs");
 const request = require('request');
 
 /**
@@ -17,7 +17,6 @@ const request = require('request');
  * @type {ioBroker.Adapter}
  */
 let adapter;
-
 
 /**
  * Starts the adapter instance
@@ -41,177 +40,114 @@ function startAdapter(options) {
                 callback();
             }
         },
-
-        // is called if a subscribed object changes
-        objectChange: (id, obj) => {
-            if (obj) {
-                // The object was changed
-                adapter.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-            } else {
-                // The object was deleted
-                adapter.log.info(`object ${id} deleted`);
-            }
-        },
-
-        // is called if a subscribed state changes
-        stateChange: (id, state) => {
-            if (state) {
-                // The state was changed
-                adapter.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-            } else {
-                // The state was deleted
-                adapter.log.info(`state ${id} deleted`);
-            }
-        },
-
-        // Some message was sent to adapter instance over message box. Used by email, pushover, text2speech, ...
-        // requires "common.message" property to be set to true in io-package.json
-        // message: (obj) => {
-        //  if (typeof obj === "object" && obj.message) {
-        //      if (obj.command === "send") {
-        //          // e.g. send email or pushover or whatever
-        //          adapter.log.info("send command");
-
-        //          // Send response in callback if required
-        //          if (obj.callback) adapter.sendTo(obj.from, obj.command, "Message received", obj.callback);
-        //      }
-        //  }
-        // },
     }));
 }
 
 function main() {
 
-    // The adapters config (in the instance object everything under the attribute "native") is accessible via
-    // adapter.config:
     adapter.log.info("site id: " + adapter.config.siteid);
     adapter.log.info("key: " + adapter.config.apikey);
 
-
+    // adapter only works with siteid and api key set
     if((!adapter.config.siteid) || (!adapter.config.apikey)) {
         adapter.log.error("siteid or api key not set")
     } else {
-        adapter.log.debug('remote request');
-
         var siteid = adapter.config.siteid;
         var apikey = adapter.config.apikey;
         var resource = "overview";
 
+        // for some other resources the url itself might change
         var url = "https://monitoringapi.solaredge.com/site/"+siteid+"/"+resource+".json?api_key="+apikey;
         adapter.log.info("request url: "+url);
 
-        request(
-            {
-                url: url, // "https://gw02.ext.ffmuc.net/nodelist.json"
-                json: true
-            },
-            function (error, response, content) {
-                adapter.log.debug('remote request done');
+        request({  url: url,
+                   json: true },
+	            function (error, response, content) {
+	                if (!error && response.statusCode == 200) {
+	                    if (content) {
+	                        var overview = content.overview;
 
-                if (!error && response.statusCode == 200) {
-                    if (content) {
-                        var overview = content.overview;
+	                        var callback = function(val){
+	                            //
+	                        }
 
-                        var callback = function(val){
-                            //
-                        }
+	                        // last update time
+	                        adapter.createState('', siteid, 'lastUpdateTime', {
+	                            name: "lastUpdateTime",
+	                            def: overview.lastUpdateTime,
+	                            type: 'string',
+	                            read: 'true',
+	                            write: 'false',
+	                            role: 'value',
+	                            desc: 'Last update from inverter'
+	                        }, callback);
 
-                        // last update time
-                        adapter.createState('', siteid, 'lastUpdateTime', {
-                            name: "lastUpdateTime",
-                            def: overview.lastUpdateTime,
-                            type: 'string',
-                            read: 'true',
-                            write: 'false',
-                            role: 'value',
-                            desc: 'Last update from inverter'
-                        }, callback);
+	                        adapter.createState('', siteid, 'currentPower', {
+	                            name: "currentPower",
+	                            def: overview.currentPower.power,
+	                            type: 'number',
+	                            read: 'true',
+	                            write: 'false',
+	                            role: 'value',
+	                            desc: 'current power in W'
+	                        }, callback);
 
-                        adapter.createState('', siteid, 'currentPower', {
-                            name: "currentPower",
-                            def: overview.currentPower.power,
-                            type: 'number',
-                            read: 'true',
-                            write: 'false',
-                            role: 'value',
-                            desc: 'current power in W'
-                        }, callback);
+	                        adapter.createState('', siteid, 'lifeTimeData', {
+	                            name: "lifeTimeData",
+	                            def: overview.lifeTimeData.energy,
+	                            type: 'number',
+	                            read: 'true',
+	                            write: 'false',
+	                            role: 'value',
+	                            desc: 'Lifetime energy in Wh'
+	                        }, callback);
 
-                        adapter.createState('', siteid, 'lifeTimeData', {
-                            name: "lifeTimeData",
-                            def: overview.lifeTimeData.energy,
-                            type: 'number',
-                            read: 'true',
-                            write: 'false',
-                            role: 'value',
-                            desc: 'Lifetime energy in Wh'
-                        }, callback);
+	                        adapter.createState('', siteid, 'lastYearData', {
+	                            name: "lastYearData",
+	                            def: overview.lastYearData.energy,
+	                            type: 'number',
+	                            read: 'true',
+	                            write: 'false',
+	                            role: 'value',
+	                            desc: 'last year energy in Wh'
+	                        }, callback);
 
-                        adapter.createState('', siteid, 'lastYearData', {
-                            name: "lastYearData",
-                            def: overview.lastYearData.energy,
-                            type: 'number',
-                            read: 'true',
-                            write: 'false',
-                            role: 'value',
-                            desc: 'last year energy in Wh'
-                        }, callback);
+	                        adapter.createState('', siteid, 'lastMonthData', {
+	                            name: "lastMonthData",
+	                            def: overview.lastMonthData.energy,
+	                            type: 'number',
+	                            read: 'true',
+	                            write: 'false',
+	                            role: 'value',
+	                            desc: 'last month energy in Wh'
+	                        }, callback);
 
-                        adapter.createState('', siteid, 'lastMonthData', {
-                            name: "lastMonthData",
-                            def: overview.lastMonthData.energy,
-                            type: 'number',
-                            read: 'true',
-                            write: 'false',
-                            role: 'value',
-                            desc: 'last month energy in Wh'
-                        }, callback);
+	                        adapter.createState('', siteid, 'lastDayData', {
+	                            name: "lastDayData",
+	                            def: overview.lastDayData.energy,
+	                            type: 'number',
+	                            read: 'true',
+	                            write: 'false',
+	                            role: 'value',
+	                            desc: 'last day energy in Wh'
+	                        }, callback);
 
-                        adapter.createState('', siteid, 'lastDayData', {
-                            name: "lastDayData",
-                            def: overview.lastDayData.energy,
-                            type: 'number',
-                            read: 'true',
-                            write: 'false',
-                            role: 'value',
-                            desc: 'last day energy in Wh'
-                        }, callback);
+	                    } else {
+	                        adapter.log.warn('Response has no valid content. Check your data and try again. '+response.statusCode);
+	                    }
+	                } else {
+	                    adapter.log.warn(error);
+	                }
 
-                    } else {
-                        adapter.log.warn('Response has no valid content. Check your data and try again. '+response.statusCode);
-                    }
-                } else {
-                    adapter.log.warn(error);
-                }
-            }
-        );
+	                adapter.stop();
+	            });
     }
 
-
-
-    // in this template all states changes inside the adapters namespace are subscribed
-    //adapter.subscribeStates("*");
-
-    /*
-        setState examples
-        you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-    */
-    // the variable testVariable is set to true as command (ack=false)
-    adapter.setState("testVariable", true);
-
-    // same thing, but the value is flagged "ack"
-    // ack should be always set to true if the value is received from or acknowledged from the target system
-    adapter.setState("testVariable", { val: true, ack: true });
-
-    // same thing, but the state is deleted after 30s (getState will return null afterwards)
-    adapter.setState("testVariable", { val: true, ack: true, expire: 30 });
-
+    // (force) stop adapter after 15s
     setTimeout(function() {
         adapter.stop();
     }, 15000);
-    //setTimeout(this.stop.bind(this), 10000);
 }
-
 
 // @ts-ignore parent is a valid property on module
 if (module.parent) {
