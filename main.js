@@ -70,7 +70,7 @@ function main() {
 
 	                        var overview = content.overview;
 
-	                        adapter.log.info("Current power for "+siteid+": "+overview.currentPower.power+" W");	
+	                        adapter.log.info("Current power for "+siteid+": "+overview.currentPower.power+" W");
 
 	                        // last update time
 	                        adapter.createState('', siteid, 'lastUpdateTime', {
@@ -140,10 +140,67 @@ function main() {
 	                    adapter.log.warn(error);
 	                }
 
-	                adapter.log.info("Done, stopping...");
-	                adapter.stop();
+//	                adapter.log.info("Done, stopping...");
+//	                adapter.stop();
 	            });
-    }
+	var resource = "currentPowerFlow";
+	var url = "https://monitoringapi.solaredge.com/site/"+siteid+"/"+resource+".json?api_key="+apikey;
+	request({  url: url,
+                  json: true },
+            function (error, response, content) {
+                if (!error && response.statusCode == 200) {
+                    if (content) {
+
+                           var callback = function(val){}
+
+                        var currentPowerFlow = content.siteCurrentPowerFlow;
+			console.log(currentPowerFlow);
+			console.log("Test");
+                        adapter.log.info("Current power for "+siteid);
+
+                        adapter.createState('', siteid, 'GRID', {
+                            name: "GRID currentPower",
+                            def: currentPowerFlow.GRID.currentPower,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'current power in W'
+                        }, callback);
+
+			adapter.createState('', siteid, 'LOAD', {
+                            name: "LOAD currentPower",
+                            def: currentPowerFlow.LOAD.currentPower,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'current power in W'
+                        }, callback);
+
+			adapter.createState('', siteid, 'PV', {
+                            name: "PV currentPower",
+                            def: currentPowerFlow.PV.currentPower,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'current power in W'
+                        }, callback);
+
+                    } else {
+                        adapter.log.warn('Response has no valid content. Check your data and try again. '+response.statusCode);
+                    }
+                } else {
+                    adapter.log.warn(error);
+                }
+
+                adapter.log.info("Done, stopping...");
+                adapter.stop();
+            });
+
+
+	}
 
     // (force) stop adapter after 15s
     setTimeout(function() {
