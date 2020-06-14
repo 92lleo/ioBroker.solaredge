@@ -73,6 +73,10 @@
         "schedule": "*/15 * * * *",
         "type": "energy",
         "compact": true,
+	"native": {
+        	"siteid: "",
+        	"apikey": ""
+    	},
         "materialize": true,
         "dependencies": [
             {

@@ -187,9 +187,187 @@ function main() {
                     adapter.log.warn(error);
                 }
 
-                adapter.log.info("Done, stopping...");
-                adapter.stop();
+                /////// powerflow start
+
             });
+
+        // getting more info from PowerFlow
+        var resource = "currentPowerFlow";
+        var url = "https://monitoringapi.solaredge.com/site/" + siteid + "/" + resource + ".json?api_key=" + apikey;
+        request({
+                url: url,
+                json: true
+            },
+            function (error, response, content) {
+                if (!error && response.statusCode == 200) {
+                    if (content) {
+                        if(content.siteCurrentPowerFlow && !content.siteCurrentPowerFlow.length===0) {
+                            var callback = function (val) {};
+                            var powerflow = content.siteCurrentPowerFlow;
+                            var gridIn = 0.0;
+                            var gridOut = 0.0;
+                            var gridAbs = 0.0;
+                            var load = powerflow.LOAD.currentPower;
+                            var pv = powerflow.PV.currentPower;
+                            var storageIn = 0.0;
+                            var storageOut = 0.0;
+                            var storageAbs = 0.0;
+                            // get storage charge level only if storage exists
+                            if (powerflow.Storage) {
+                                var storageLevel = powerflow.STORAGE.chargeLevel;
+                            }
+
+                            var connections = powerflow.connections;
+                            var con = Object.keys(connections[0]);
+                            con.forEach(function (junction) {
+                                switch (junction["from"]) {
+                                    case "STORAGE":
+                                        // only LOAD is a valid target
+                                        storageOut = powerflow.STORAGE.currentPower;
+                                        storageAbs = -powerflow.STORAGE.currentPower;
+                                        break;
+                                    case "GRID":
+                                        // only LOAD is a valid target
+                                        gridIn = powerflow.GRID.currentPower;
+                                        gridAbs = powerflow.GRID.currentPower;
+                                        break;
+                                    case "PV":
+                                        switch (junction["to"]) {
+                                            case "Load":
+                                                // nothing to handle: LOADs currentPower already available through dedicated value
+                                                break;
+                                            case "Storage":
+                                                storageIn = powerflow.STORAGE.currentPower;
+                                                storageAbs = powerflow.STORAGE.currentPower;
+                                                break;
+                                            default:
+                                                adapter.log.warn('Unknown target: ' + junction["to"] + ' for source: ' + junction["from"] + '.');
+                                        }
+                                        break;
+                                    case "LOAD":
+                                        switch (junction["to"]) {
+                                            case "GRID":
+                                                gridOut = powerflow.GRID.currentPower;
+                                                gridAbs = -powerflow.GRID.currentPower;
+                                                break;
+                                            default:
+                                                adapter.log.warn('Unknown target: ' + junction["to"] + ' for source: ' + junction["from"] + '.');
+                                        }
+                                    default:
+                                        adapter.log.warn('Unknown source: ' + junction["from"] + '.');
+                                }
+                            });
+
+                            adapter.createState('', siteid, 'gridIn', {
+                                name: "gridIn",
+                                def: gridIn,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'current power in kW',
+                                unit: "kW"
+                            }, callback);
+                            adapter.createState('', siteid, 'gridOut', {
+                                name: "gridOut",
+                                def: gridOut,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'current power in kW',
+                                unit: "kW"
+                            }, callback);
+                            adapter.createState('', siteid, 'gridAbs', {
+                                name: "gridAbs",
+                                def: gridAbs,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'current power in kW',
+                                unit: "kW"
+                            }, callback);
+                            adapter.createState('', siteid, 'load', {
+                                name: "load",
+                                def: load,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'current power in kW',
+                                unit: "kW"
+                            }, callback);
+                            adapter.createState('', siteid, 'pv', {
+                                name: "pv",
+                                def: pv,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'current power in kW',
+                                unit: "kW"
+                            }, callback);
+
+                            // create storage states only if storage exists
+                            if (powerflow.Storage) {
+                                adapter.createState('', siteid, 'storageIn', {
+                                    name: "storageIn",
+                                    def: storageIn,
+                                    type: 'number',
+                                    read: true,
+                                    write: false,
+                                    role: 'value',
+                                    desc: 'current power in kW',
+                                    unit: "kW"
+                                }, callback);
+                                adapter.createState('', siteid, 'storageOut', {
+                                    name: "storageOut",
+                                    def: storageOut,
+                                    type: 'number',
+                                    read: true,
+                                    write: false,
+                                    role: 'value',
+                                    desc: 'current power in kW',
+                                    unit: "kW"
+                                }, callback);
+                                adapter.createState('', siteid, 'storageAbs', {
+                                    name: "storageAbs",
+                                    def: storageAbs,
+                                    type: 'number',
+                                    read: true,
+                                    write: false,
+                                    role: 'value',
+                                    desc: 'current power in kW',
+                                    unit: "kW"
+                                }, callback);
+                                adapter.createState('', siteid, 'storageLevel', {
+                                    name: "storageLevel",
+                                    def: storageLevel,
+                                    type: 'number',
+                                    read: true,
+                                    write: false,
+                                    role: 'value',
+                                    desc: 'current chargeLevel in %',
+                                    unit: "%"
+                                }, callback);
+                            }
+                        } else {
+                            adapter.log.info('Response for site '+siteid+' has no ressource siteCurrentPowerFlow, ignoring');
+                        }
+                    } else {
+                        adapter.log.warn('Response has no valid content. Check your data and try again. ' + response.statusCode);
+                    }
+                } else {
+                    adapter.log.warn(error);
+                }
+            });
+
+        /////// powerflow end
+
+        adapter.log.info("Done, stopping...");
+        adapter.stop();
+
     }
 
     // (force) stop adapter after 15s
