@@ -189,7 +189,32 @@ function main() {
                             role: 'value',
                             desc: 'current power in W'
                         }, callback);
+			
+			if (currentPowerFlow.STORAGE) {
 
+                        adapter.createState('', siteid, 'StorageCurPower', {
+                            name: "Storage currentPower",
+                            def: currentPowerFlow.STORAGE.currentPower,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'current power in W'
+                        }, callback);
+
+			adapter.createState('', siteid, 'StorageChargeLevel', {
+                            name: "Storage Charging Level",
+                            def: currentPowerFlow.STORAGE.chargeLevel,
+                            type: 'number',
+                            read: 'true',
+                            write: 'false',
+                            role: 'value',
+                            desc: 'Storage Charge Level in W'
+                        }, callback);
+			
+			
+			
+			}
                     } else {
                         adapter.log.warn('Response has no valid content. Check your data and try again. '+response.statusCode);
                     }
