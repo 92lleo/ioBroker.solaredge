@@ -158,9 +158,12 @@ function main() {
 			console.log("Test");
                         adapter.log.info("Current power for "+siteid);
 
+                        // Create negative Values if Powerflow from PV to GRID
+if (currentPowerFlow.connections.from == "GRID") { var gridpower = currentPowerFlow.GRID.currentPower} else { var gridpower = 0 - currentPowerFlow.GRID.currentPower};
+
                         adapter.createState('', siteid, 'GRID', {
                             name: "GRID currentPower",
-                            def: currentPowerFlow.GRID.currentPower,
+                            def: gridpower,
                             type: 'number',
                             read: 'true',
                             write: 'false',
