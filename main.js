@@ -140,8 +140,6 @@ function main() {
 	                    adapter.log.warn(error);
 	                }
 
-//	                adapter.log.info("Done, stopping...");
-//	                adapter.stop();
 	            });
 	var resource = "currentPowerFlow";
 	var url = "https://monitoringapi.solaredge.com/site/"+siteid+"/"+resource+".json?api_key="+apikey;
@@ -154,21 +152,22 @@ function main() {
                            var callback = function(val){}
 
                         var currentPowerFlow = content.siteCurrentPowerFlow;
-			console.log(currentPowerFlow);
-			console.log("Test");
+//			console.log(currentPowerFlow);
                         adapter.log.info("Current power for "+siteid);
-
-                        // Create negative Values if Powerflow from PV to GRID
-if (currentPowerFlow.connections.from == "GRID") { var gridpower = currentPowerFlow.GRID.currentPower} else { var gridpower = 0 - currentPowerFlow.GRID.currentPower};
-
-                        adapter.createState('', siteid, 'GRID', {
+// Create negative Values if Powerflow from PV to GRID
+			var gpower = currentPowerFlow.connections[0];
+			gpower = JSON.stringify(gpower);
+			if (gpower.includes('"from":"GRID"')) { var gridpower = currentPowerFlow.GRID.currentPower} else { var gridpower = 0 - currentPowerFlow.GRID.currentPower};
+                        
+			    
+			    adapter.createState('', siteid, 'GRID', {
                             name: "GRID currentPower",
                             def: gridpower,
                             type: 'number',
                             read: 'true',
                             write: 'false',
                             role: 'value',
-                            desc: 'current power in kW'
+                            desc: 'current power in W'
                         }, callback);
 
 			adapter.createState('', siteid, 'LOAD', {
@@ -178,7 +177,7 @@ if (currentPowerFlow.connections.from == "GRID") { var gridpower = currentPowerF
                             read: 'true',
                             write: 'false',
                             role: 'value',
-                            desc: 'current power in kW'
+                            desc: 'current power in W'
                         }, callback);
 
 			adapter.createState('', siteid, 'PV', {
@@ -188,7 +187,7 @@ if (currentPowerFlow.connections.from == "GRID") { var gridpower = currentPowerF
                             read: 'true',
                             write: 'false',
                             role: 'value',
-                            desc: 'current power in kW'
+                            desc: 'current power in W'
                         }, callback);
 
                     } else {
