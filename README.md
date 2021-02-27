@@ -29,6 +29,10 @@ Roadmap:
 
 ## Changelog
 
+### 0.1.1
+* (92lleo) fix "object data is invalid" issue, now works with new js-controller
+* (92lleo) update dependencies
+
 ### 0.1.0
 * (92lleo) first beta release. overview data from inteverters are available
 
@@ -38,7 +42,7 @@ Roadmap:
 ## License
 MIT License
 
-Copyright (c) 2019 Leonhard Kuenzler <leonhard@kuenzler.io>
+Copyright (c) 2019-2021 Leonhard Kuenzler <leonhard@kuenzler.io>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
