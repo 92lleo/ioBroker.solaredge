@@ -77,8 +77,8 @@ function main() {
 	                            name: "lastUpdateTime",
 	                            def: overview.lastUpdateTime,
 	                            type: 'string',
-	                            read: 'true',
-	                            write: 'false',
+	                            read: true,
+	                            write: false,
 	                            role: 'value',
 	                            desc: 'Last update from inverter'
 	                        }, callback);
@@ -87,8 +87,8 @@ function main() {
 	                            name: "currentPower",
 	                            def: overview.currentPower.power,
 	                            type: 'number',
-	                            read: 'true',
-	                            write: 'false',
+	                            read: true,
+	                            write: false,
 	                            role: 'value',
 	                            desc: 'current power in W'
 	                        }, callback);
@@ -97,8 +97,8 @@ function main() {
 	                            name: "lifeTimeData",
 	                            def: overview.lifeTimeData.energy,
 	                            type: 'number',
-	                            read: 'true',
-	                            write: 'false',
+	                            read: true,
+	                            write: false,
 	                            role: 'value',
 	                            desc: 'Lifetime energy in Wh'
 	                        }, callback);
@@ -107,8 +107,8 @@ function main() {
 	                            name: "lastYearData",
 	                            def: overview.lastYearData.energy,
 	                            type: 'number',
-	                            read: 'true',
-	                            write: 'false',
+	                            read: true,
+	                            write: false,
 	                            role: 'value',
 	                            desc: 'last year energy in Wh'
 	                        }, callback);
@@ -117,8 +117,8 @@ function main() {
 	                            name: "lastMonthData",
 	                            def: overview.lastMonthData.energy,
 	                            type: 'number',
-	                            read: 'true',
-	                            write: 'false',
+	                            read: true,
+	                            write: false,
 	                            role: 'value',
 	                            desc: 'last month energy in Wh'
 	                        }, callback);
@@ -127,8 +127,8 @@ function main() {
 	                            name: "lastDayData",
 	                            def: overview.lastDayData.energy,
 	                            type: 'number',
-	                            read: 'true',
-	                            write: 'false',
+	                            read: true,
+	                            write: false,
 	                            role: 'value',
 	                            desc: 'last day energy in Wh'
 	                        }, callback);
