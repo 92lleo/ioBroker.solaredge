@@ -17,6 +17,7 @@ const request = require('request');
  * @type {ioBroker.Adapter}
  */
 let adapter;
+let timer;
 
 /**
  * Starts the adapter instance
@@ -35,6 +36,7 @@ function startAdapter(options) {
         unload: (callback) => {
             try {
                 adapter.log.info("cleaned everything up...");
+                clearTimeout(timer);
                 callback();
             } catch (e) {
                 callback();
@@ -146,7 +148,7 @@ function main() {
     }
 
     // (force) stop adapter after 15s
-    setTimeout(function() {
+    timer = setTimeout(function() {
         adapter.log.warn("Timeout, stopping...");
         adapter.stop();
     }, 15000);
