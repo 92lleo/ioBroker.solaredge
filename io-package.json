@@ -75,7 +75,9 @@
             {
                 "js-controller": ">=1.4.2"
             }
-        ]
+        ],
+        "connectionType": "cloud",
+        "dataSource": "poll"
     },
     "native": {},
     "objects": [],
