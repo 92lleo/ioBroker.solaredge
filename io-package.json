@@ -70,6 +70,10 @@
         "schedule": "*/5 * * * *",
         "type": "energy",
         "compact": true,
+	"native": {
+        	"siteid: "",
+        	"apikey": ""
+    	},
         "materialize": true,
         "dependencies": [
             {
