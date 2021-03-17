@@ -18,6 +18,8 @@ const request = require('request');
  */
 let adapter;
 let timer;
+let createStates;
+let siteid;
 
 /**
  * Starts the adapter instance
@@ -45,106 +47,149 @@ function startAdapter(options) {
     }));
 }
 
+function checkStateCreationNeeded(stateName){
+    adapter.instance
+    adapter.getState('solaredge.' + adapter.instance + '.' + siteid + '.' + stateName, function (err, state) {
+        if (!state) {
+            adapter.log.info("state "+stateName+" does not exist, will be created");
+            createStates = true;
+        } else {
+            adapter.log.debug("state "+stateName+" exists");
+            createStates |= false;
+        }
+    });
+}
+
+function checkStatesCreationNeeded(){
+    checkStateCreationNeeded('lastUpdateTime');
+    checkStateCreationNeeded('currentPower');
+    checkStateCreationNeeded('lifeTimeData');
+    checkStateCreationNeeded('lastYearData');
+    checkStateCreationNeeded('lastMonthData');
+    checkStateCreationNeeded('lastDayData');
+}
+
 function main() {
 
-	var siteid = adapter.config.siteid;
+    siteid = adapter.config.siteid;
     var apikey = adapter.config.apikey;
 
     adapter.log.info("site id: " + siteid);
     adapter.log.info("api key: " + (apikey ? (apikey.substring(0, 4) + "...") : "not set"));
 
     // adapter only works with siteid and api key set
-    if((!siteid) || (!apikey)) {
+    if ((!siteid) || (!apikey)) {
         adapter.log.error("siteid or api key not set")
     } else {
         var resource = "overview";
 
         // for some other resources the url itself might change
-        var url = "https://monitoringapi.solaredge.com/site/"+siteid+"/"+resource+".json?api_key="+apikey;
+        var url = "https://monitoringapi.solaredge.com/site/" + siteid + "/" + resource + ".json?api_key=" + apikey;
 
-        request({  url: url,
-                   json: true },
-	            function (error, response, content) {
-	                if (!error && response.statusCode == 200) {
-	                    if (content) {
+        checkStatesCreationNeeded();
 
-                            var callback = function(val){}
+        request({
+                url: url,
+                json: true
+            },
+            function (error, response, content) {
+                if (!error && response.statusCode == 200) {
+                    if (content) {
 
-	                        var overview = content.overview;
+                        var callback = function (val) {}
 
-	                        adapter.log.info("Current power for "+siteid+": "+overview.currentPower.power+" W");	
+                        var overview = content.overview;
 
-	                        // last update time
-	                        adapter.createState('', siteid, 'lastUpdateTime', {
-	                            name: "lastUpdateTime",
-	                            def: overview.lastUpdateTime,
-	                            type: 'string',
-	                            read: true,
-	                            write: false,
-	                            role: 'value',
-	                            desc: 'Last update from inverter'
-	                        }, callback);
+                        adapter.log.info("Current power for " + siteid + ": " + overview.currentPower.power + " W");
 
-	                        adapter.createState('', siteid, 'currentPower', {
-	                            name: "currentPower",
-	                            def: overview.currentPower.power,
-	                            type: 'number',
-	                            read: true,
-	                            write: false,
-	                            role: 'value',
-	                            desc: 'current power in W'
-	                        }, callback);
+                        if (createStates) {
+                            adapter.log.debug("creating states");
+                            // create all states, only needed on first start or after state deletion
 
-	                        adapter.createState('', siteid, 'lifeTimeData', {
-	                            name: "lifeTimeData",
-	                            def: overview.lifeTimeData.energy,
-	                            type: 'number',
-	                            read: true,
-	                            write: false,
-	                            role: 'value',
-	                            desc: 'Lifetime energy in Wh'
-	                        }, callback);
+                            // last update time
+                            adapter.createState('', siteid, 'lastUpdateTime', {
+                                name: "lastUpdateTime",
+                                def: overview.lastUpdateTime,
+                                type: 'string',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'Last update from inverter'
+                            }, callback);
 
-	                        adapter.createState('', siteid, 'lastYearData', {
-	                            name: "lastYearData",
-	                            def: overview.lastYearData.energy,
-	                            type: 'number',
-	                            read: true,
-	                            write: false,
-	                            role: 'value',
-	                            desc: 'last year energy in Wh'
-	                        }, callback);
+                            adapter.createState('', siteid, 'currentPower', {
+                                name: "currentPower",
+                                def: overview.currentPower.power,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'current power in W'
+                            }, callback);
 
-	                        adapter.createState('', siteid, 'lastMonthData', {
-	                            name: "lastMonthData",
-	                            def: overview.lastMonthData.energy,
-	                            type: 'number',
-	                            read: true,
-	                            write: false,
-	                            role: 'value',
-	                            desc: 'last month energy in Wh'
-	                        }, callback);
+                            adapter.createState('', siteid, 'lifeTimeData', {
+                                name: "lifeTimeData",
+                                def: overview.lifeTimeData.energy,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'Lifetime energy in Wh'
+                            }, callback);
 
-	                        adapter.createState('', siteid, 'lastDayData', {
-	                            name: "lastDayData",
-	                            def: overview.lastDayData.energy,
-	                            type: 'number',
-	                            read: true,
-	                            write: false,
-	                            role: 'value',
-	                            desc: 'last day energy in Wh'
-	                        }, callback);
+                            adapter.createState('', siteid, 'lastYearData', {
+                                name: "lastYearData",
+                                def: overview.lastYearData.energy,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'last year energy in Wh'
+                            }, callback);
 
-	                    } else {
-	                        adapter.log.warn('Response has no valid content. Check your data and try again. '+response.statusCode);
-	                    }
-	                } else {
-	                    adapter.log.warn(error);
-	                }
+                            adapter.createState('', siteid, 'lastMonthData', {
+                                name: "lastMonthData",
+                                def: overview.lastMonthData.energy,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'last month energy in Wh'
+                            }, callback);
 
-	                adapter.log.info("Done, stopping...");
-	                adapter.stop();
-	            });
+                            adapter.createState('', siteid, 'lastDayData', {
+                                name: "lastDayData",
+                                def: overview.lastDayData.energy,
+                                type: 'number',
+                                read: true,
+                                write: false,
+                                role: 'value',
+                                desc: 'last day energy in Wh'
+                            }, callback);
+
+                            createStates = false;
+
+                        } else {
+                            // just update
+                            adapter.log.debug("updating states");
+
+                            adapter.setStateChanged(siteid + '.lastUpdateTime', overview.lastUpdateTime, true);
+                            adapter.setStateChanged(siteid + '.currentPower', overview.currentPower.power, true);
+                            adapter.setStateChanged(siteid + '.lifeTimeData', overview.lifeTimeData.energy, true);
+                            adapter.setStateChanged(siteid + '.lastYearData', overview.lastYearData.energy, true);
+                            adapter.setStateChanged(siteid + '.lastMonthData', overview.lastMonthData.energy, true);
+                            adapter.setStateChanged(siteid + '.lastDayData', overview.lastDayData.energy, true);
+                        }
+                    } else {
+                        adapter.log.warn('Response has no valid content. Check your data and try again. ' + response.statusCode);
+                    }
+                } else {
+                    adapter.log.warn(error);
+                }
+
+                adapter.log.info("Done, stopping...");
+                adapter.stop();
+            });
     }
 
     // (force) stop adapter after 15s
