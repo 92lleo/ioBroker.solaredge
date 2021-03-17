@@ -79,7 +79,10 @@
         "connectionType": "cloud",
         "dataSource": "poll"
     },
-    "native": {},
+    "native": {
+        "siteid": "",
+        "apikey": ""
+    },
     "objects": [],
     "instanceObjects": []
 }
