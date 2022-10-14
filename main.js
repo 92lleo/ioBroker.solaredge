@@ -17,7 +17,6 @@ const request = require('request');
  * @type {ioBroker.Adapter}
  */
 let adapter;
-let timer;
 let createStates;
 let siteid;
 
@@ -36,13 +35,7 @@ function startAdapter(options) {
 
         // is called when adapter shuts down - callback has to be called under any circumstances!
         unload: (callback) => {
-            try {
-                adapter.log.info("cleaned everything up...");
-                clearTimeout(timer);
-                callback();
-            } catch (e) {
-                callback();
-            }
+            callback();
         },
     }));
 }
@@ -92,11 +85,9 @@ function main() {
                 url: url,
                 json: true
             },
-            function (error, response, content) {
-                if (!error && response.statusCode == 200) {
+            async function (error, response, content) {
+                if (!error && response.statusCode === 200) {
                     if (content) {
-
-                        var callback = function (val) {}
 
                         var overview = content.overview;
 
@@ -107,79 +98,71 @@ function main() {
                             // create all states, only needed on first start or after state deletion
 
                             // last update time
-                            adapter.createState('', siteid, 'lastUpdateTime', {
+                            await adapter.createStateAsync('', siteid, 'lastUpdateTime', {
                                 name: "lastUpdateTime",
-                                def: overview.lastUpdateTime,
                                 type: 'string',
                                 read: true,
                                 write: false,
                                 role: 'value',
                                 desc: 'Last update from inverter'
-                            }, callback);
+                            });
 
-                            adapter.createState('', siteid, 'currentPower', {
+                            await adapter.createStateAsync('', siteid, 'currentPower', {
                                 name: "currentPower",
-                                def: overview.currentPower.power,
                                 type: 'number',
                                 read: true,
                                 write: false,
                                 role: 'value',
                                 desc: 'current power in W'
-                            }, callback);
+                            });
 
-                            adapter.createState('', siteid, 'lifeTimeData', {
+                            await adapter.createStateAsync('', siteid, 'lifeTimeData', {
                                 name: "lifeTimeData",
-                                def: overview.lifeTimeData.energy,
                                 type: 'number',
                                 read: true,
                                 write: false,
                                 role: 'value',
                                 desc: 'Lifetime energy in Wh'
-                            }, callback);
+                            });
 
-                            adapter.createState('', siteid, 'lastYearData', {
+                            await adapter.createStateAsync('', siteid, 'lastYearData', {
                                 name: "lastYearData",
-                                def: overview.lastYearData.energy,
                                 type: 'number',
                                 read: true,
                                 write: false,
                                 role: 'value',
                                 desc: 'last year energy in Wh'
-                            }, callback);
+                            });
 
-                            adapter.createState('', siteid, 'lastMonthData', {
+                            await adapter.createStateAsync('', siteid, 'lastMonthData', {
                                 name: "lastMonthData",
-                                def: overview.lastMonthData.energy,
                                 type: 'number',
                                 read: true,
                                 write: false,
                                 role: 'value',
                                 desc: 'last month energy in Wh'
-                            }, callback);
+                            });
 
-                            adapter.createState('', siteid, 'lastDayData', {
+                            await adapter.createStateAsync('', siteid, 'lastDayData', {
                                 name: "lastDayData",
-                                def: overview.lastDayData.energy,
                                 type: 'number',
                                 read: true,
                                 write: false,
                                 role: 'value',
                                 desc: 'last day energy in Wh'
-                            }, callback);
+                            });
 
                             createStates = false;
 
-                        } else {
-                            // just update
-                            adapter.log.debug("updating states");
-
-                            adapter.setStateChanged(siteid + '.lastUpdateTime', overview.lastUpdateTime, true);
-                            adapter.setStateChanged(siteid + '.currentPower', overview.currentPower.power, true);
-                            adapter.setStateChanged(siteid + '.lifeTimeData', overview.lifeTimeData.energy, true);
-                            adapter.setStateChanged(siteid + '.lastYearData', overview.lastYearData.energy, true);
-                            adapter.setStateChanged(siteid + '.lastMonthData', overview.lastMonthData.energy, true);
-                            adapter.setStateChanged(siteid + '.lastDayData', overview.lastDayData.energy, true);
                         }
+                        adapter.log.debug("updating states");
+
+                        await adapter.setStateChangedAsync(siteid + '.lastUpdateTime', overview.lastUpdateTime, true);
+                        await adapter.setStateChangedAsync(siteid + '.currentPower', overview.currentPower.power, true);
+                        await adapter.setStateChangedAsync(siteid + '.lifeTimeData', overview.lifeTimeData.energy, true);
+                        await adapter.setStateChangedAsync(siteid + '.lastYearData', overview.lastYearData.energy, true);
+                        await adapter.setStateChangedAsync(siteid + '.lastMonthData', overview.lastMonthData.energy, true);
+                        await adapter.setStateChangedAsync(siteid + '.lastDayData', overview.lastDayData.energy, true);
                     } else {
                         adapter.log.warn('Response has no valid content. Check your data and try again. ' + response.statusCode);
                     }
@@ -192,11 +175,6 @@ function main() {
             });
     }
 
-    // (force) stop adapter after 15s
-    timer = setTimeout(function() {
-        adapter.log.warn("Timeout, stopping...");
-        adapter.stop();
-    }, 15000);
 }
 
 // @ts-ignore parent is a valid property on module
