@@ -3,6 +3,9 @@
         "name": "solaredge",
         "version": "0.2.0",
         "news": {
+            "0.3.0": {
+                "en": "Address review feedback from adapter review (see #19)"
+            },
             "0.2.0": {
                 "en": "Fix updating already created states and internal polishing"
             },

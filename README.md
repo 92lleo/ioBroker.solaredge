@@ -29,6 +29,9 @@ Roadmap:
 
 ## Changelog
 
+### 0.3.0
+* (Apollon77) Address review feedback from adapter review (see #19)
+
 ### 0.2.0
 * (92lleo) Add default values for native config vars
 * (92lleo) Set schedule to 15s to match api update rate
