@@ -1,0 +1,5 @@
+{
+  "instructions": "Enter your inverter site id and solaredge monitoring api key below. The api has a limit of 300requests/day, so don't set the scheduling too low. The data is only updated every 15 minutes on solaredge side.",
+  "Site ID": "Site ID",
+  "API key": "API key"
+}

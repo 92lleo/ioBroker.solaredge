@@ -1,0 +1,27 @@
+{
+  "i18n": true,
+  "type": "panel",
+  "items": {
+    "_desc": {
+      "type": "staticText",
+      "text": "instructions",
+      "sm": 12
+    },
+    "siteid": {
+      "newLine": true,
+      "type": "text",
+      "label": "Site ID",
+      "sm": 12,
+      "md": 6,
+      "lg": 4
+    },
+    "apikey": {
+      "newLine": true,
+      "type": "text",
+      "label": "API key",
+      "sm": 12,
+      "md": 6,
+      "lg": 4
+    }
+  }
+}

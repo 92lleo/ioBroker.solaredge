@@ -76,7 +76,9 @@
         "schedule": "*/15 * * * *",
         "type": "energy",
         "compact": true,
-        "materialize": true,
+        "adminUI": {
+            "config": "json"
+        },
         "dependencies": [
             {
                 "js-controller": ">=3.0.0"

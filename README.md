@@ -20,14 +20,19 @@ Currently, only the /overview data point is used to get the current power and da
 You can also enable modbus on your solaredge device if it's a newer one and read the data directly. 
 
 You need your site id and api key to use this adapter. To get these, go to https://monitoring.solaredge.com  
-site id: log in, site id is the "ID" on the right, eg 12345  
-api key: log in, go to the admin settings and enable api access there. If you don't see admin settings, send a mail to solaredge to enable admin for your account.
+- site id: log in, site id is the "ID" on the right, e.g., 12345.  
+- api key: log in, go to the admin settings and enable api access there. If you don't see admin settings, send mail to solaredge to enable admin for your account.
 
 Roadmap:
 * Add power and energy details
 * Add other devices than inverters
 
+<!--
+	### **WORK IN PROGRESS**
+-->
 ## Changelog
+### **WORK IN PROGRESS**
+* (bluefox) Added JSON config and replaced `require` module with `axios`
 
 ### 0.3.0
 * (Apollon77) Address review feedback from adapter review (see #19)
@@ -38,7 +43,7 @@ Roadmap:
 * (92lleo) Fix updating already created states (broken since new js-controller, see #9)
 * (92lleo) Update dependencies
 * (92lleo) Clear timer on unload
-* (92lleo) Add connection type and dataSource
+* (92lleo) Add a connection type and dataSource
 
 ### 0.1.1
 * (92lleo) fix "object data is invalid" issue, now works with new js-controller
@@ -53,7 +58,7 @@ Roadmap:
 ## License
 MIT License
 
-Copyright (c) 2019-2021 Leonhard Kuenzler <leonhard@kuenzler.io>
+Copyright (c) 2019-2023 Leonhard Kuenzler <leonhard@kuenzler.io>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

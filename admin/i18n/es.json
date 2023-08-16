@@ -1,0 +1,5 @@
+{
+  "instructions": "Ingrese la identificación del sitio del inversor y la clave API de monitoreo de solaredge a continuación. La API tiene un límite de 300 solicitudes por día, así que no configure la programación demasiado baja. Los datos solo se actualizan cada 15 minutos en el lado solaredge.",
+  "Site ID": "Site ID",
+  "API key": "Clave API"
+}

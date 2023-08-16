@@ -1,0 +1,5 @@
+{
+  "instructions": "Voer hieronder uw site-ID van uw omvormer en de API-sleutel voor monitoring van de solaredge in. De API heeft een limiet van 300 verzoeken/dag, dus stel de planning niet te laag in. De gegevens worden aan de kant van solaredge slechts elke 15 minuten bijgewerkt.",
+  "Site ID": "Site ID",
+  "API key": "API sleutel"
+}
