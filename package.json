@@ -1,6 +1,6 @@
 {
   "name": "iobroker.solaredge",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Get data from solaredge monitoring portal",
   "author": {
     "name": "92lleo",
