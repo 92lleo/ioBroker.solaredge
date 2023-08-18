@@ -31,7 +31,7 @@ Roadmap:
 	### **WORK IN PROGRESS**
 -->
 ## Changelog
-### 1.0.0 (2023-08-16)
+### **WORK IN PROGRESS**
 * (bluefox) Added JSON config and replaced `require` module with `axios`
 
 ### 0.3.0
