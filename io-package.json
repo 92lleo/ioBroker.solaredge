@@ -1,96 +1,109 @@
 {
-    "common": {
-        "name": "solaredge",
-        "version": "1.0.0",
-        "news": {
-            "0.3.0": {
-                "en": "Address review feedback from adapter review (see #19)"
-            },
-            "0.2.0": {
-                "en": "Fix updating already created states and internal polishing"
-            },
-            "0.1.1": {
-                "en": "fix \"object data is invalid\" issue, now works with new js-controller"
-            },
-            "0.1.0": {
-                "en": "First beta release",
-                "de": "Erste Beta"
-            },
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
-            }
-        },
-        "title": "Solaredge Monitoring",
-        "titleLang": {
-            "en": "Solaredge Monitoring",
-            "de": "Solaredge-Überwachung",
-            "ru": "Мониторинг Solaredge",
-            "pt": "Solaredge Monitoring",
-            "nl": "Solaredge Monitoring",
-            "fr": "Surveillance de Solaredge",
-            "it": "Monitoraggio di Solaredge",
-            "es": "Monitoreo Solaredge",
-            "pl": "Monitorowanie Solaredge",
-            "zh-cn": "Solaredge监控"
-        },
-        "desc": {
-            "en": "Get data from solaredge monitoring portal",
-            "de": "Rufen Sie Daten vom Solaredge-Überwachungsportal ab",
-            "ru": "Получить данные с портала мониторинга Solaredge",
-            "pt": "Obter dados do portal de monitoramento solaredge",
-            "nl": "Gegevens ophalen uit de portal voor solaredge-monitoring",
-            "fr": "Obtenez les données du portail de surveillance Solaredge",
-            "it": "Ottieni dati dal portale di monitoraggio di Solaredge",
-            "es": "Obtenga datos del portal de monitoreo de solaredge",
-            "pl": "Uzyskaj dane z portalu monitorowania Solaredge",
-            "zh-cn": "从solaredge监控门户获取数据"
-        },
-        "authors": [
-            "92lleo <leonhard@kuenzler.io>"
-        ],
-        "keywords": [
-            "solaredge",
-            "energy",
-            "power",
-            "api",
-            "monitoring"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "solaredge.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/92lleo/ioBroker.solaredge/master/admin/solaredge.png",
-        "readme": "https://github.com/92lleo/ioBroker.solaredge/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "schedule",
-        "schedule": "*/15 * * * *",
-        "type": "energy",
-        "compact": true,
-        "adminUI": {
-            "config": "json"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=3.0.0"
-            }
-        ],
-        "connectionType": "cloud",
-        "dataSource": "poll"
+  "common": {
+    "name": "solaredge",
+    "version": "1.0.1",
+    "news": {
+      "1.0.1": {
+        "en": "Added JSON config and replaced `require` module with `axios`",
+        "de": "Hinzugefügt JSON config und ersetzt erfordern Modul mit Axios",
+        "ru": "Добавлен JSON config и заменен требуют модуля с axios",
+        "pt": "Adicionado JSON config e substituído exigem módulo com axios",
+        "nl": "_",
+        "fr": "Ajout de la configuration JSON et remplacement du module requis avec axios",
+        "it": "Aggiunto JSON config e sostituito richiedono modulo con assios",
+        "es": "Configuración JSON agregada y remplazado requiere módulo con eje",
+        "pl": "Zastąpiła konfigura JSON i zastąpiona została modułem axios",
+        "uk": "Додано налаштування JSON і заміну потрібно модуль з axios",
+        "zh-cn": "增加联合联络中心,并更换了连接点的单元。"
+      },
+      "0.3.0": {
+        "en": "Address review feedback from adapter review (see #19)"
+      },
+      "0.2.0": {
+        "en": "Fix updating already created states and internal polishing"
+      },
+      "0.1.1": {
+        "en": "fix \"object data is invalid\" issue, now works with new js-controller"
+      },
+      "0.1.0": {
+        "en": "First beta release",
+        "de": "Erste Beta"
+      },
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "首次出版"
+      }
     },
-    "native": {
-        "siteid": "",
-        "apikey": ""
+    "title": "Solaredge Monitoring",
+    "titleLang": {
+      "en": "Solaredge Monitoring",
+      "de": "Solaredge-Überwachung",
+      "ru": "Мониторинг Solaredge",
+      "pt": "Solaredge Monitoring",
+      "nl": "Solaredge Monitoring",
+      "fr": "Surveillance de Solaredge",
+      "it": "Monitoraggio di Solaredge",
+      "es": "Monitoreo Solaredge",
+      "pl": "Monitorowanie Solaredge",
+      "zh-cn": "Solaredge监控"
     },
-    "objects": [],
-    "instanceObjects": []
+    "desc": {
+      "en": "Get data from solaredge monitoring portal",
+      "de": "Rufen Sie Daten vom Solaredge-Überwachungsportal ab",
+      "ru": "Получить данные с портала мониторинга Solaredge",
+      "pt": "Obter dados do portal de monitoramento solaredge",
+      "nl": "Gegevens ophalen uit de portal voor solaredge-monitoring",
+      "fr": "Obtenez les données du portail de surveillance Solaredge",
+      "it": "Ottieni dati dal portale di monitoraggio di Solaredge",
+      "es": "Obtenga datos del portal de monitoreo de solaredge",
+      "pl": "Uzyskaj dane z portalu monitorowania Solaredge",
+      "zh-cn": "从solaredge监控门户获取数据"
+    },
+    "authors": [
+      "92lleo <leonhard@kuenzler.io>"
+    ],
+    "keywords": [
+      "solaredge",
+      "energy",
+      "power",
+      "api",
+      "monitoring"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "solaredge.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/92lleo/ioBroker.solaredge/master/admin/solaredge.png",
+    "readme": "https://github.com/92lleo/ioBroker.solaredge/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "schedule",
+    "schedule": "*/15 * * * *",
+    "type": "energy",
+    "compact": true,
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=3.0.0"
+      }
+    ],
+    "connectionType": "cloud",
+    "dataSource": "poll"
+  },
+  "native": {
+    "siteid": "",
+    "apikey": ""
+  },
+  "objects": [],
+  "instanceObjects": []
 }
