@@ -150,8 +150,8 @@ async function main() {
                     });
 
                     createStates = false;
-
                 }
+
                 adapter.log.debug('updating states');
 
                 await adapter.setStateChangedAsync(`${siteid}.lastUpdateTime`, overview.lastUpdateTime, true);
