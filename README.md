@@ -31,7 +31,7 @@ Roadmap:
 	### **WORK IN PROGRESS**
 -->
 ## Changelog
-### **WORK IN PROGRESS**
+### 1.1.0 (2023-11-16)
 * (bluefox) Added the current power flow data
 
 ### 1.0.1 (2023-08-18)

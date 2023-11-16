@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "solaredge",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "news": {
+      "1.1.0": {
+        "en": "Added the current power flow data",
+        "de": "Stromflussdaten hinzugefügt",
+        "ru": "Добавлены текущие данные потока мощности",
+        "pt": "Adicionado os dados atuais do fluxo de energia",
+        "nl": "Voeg de stroomgegevens toe",
+        "fr": "Ajout des données de flux de courant",
+        "it": "Aggiunto i dati correnti di flusso di potenza",
+        "es": "Añadido el flujo de energía actual",
+        "pl": "Wprowadzono aktualne dane przepływu prądu",
+        "uk": "Додано дані поточного потоку живлення",
+        "zh-cn": "增加目前的电力流通数据"
+      },
       "1.0.1": {
         "en": "Added JSON config and replaced `require` module with `axios`",
         "de": "Hinzugefügt JSON config und ersetzt erfordern Modul mit Axios",
