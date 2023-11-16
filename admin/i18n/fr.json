@@ -1,5 +1,6 @@
 {
   "instructions": "Entrez votre identifiant de site d'onduleur et votre clé API de surveillance solaredge ci-dessous. L'API a une limite de 300 requêtes/jour, donc ne définissez pas une planification trop basse. Les données ne sont mises à jour que toutes les 15 minutes côté solaredge.",
   "Site ID": "Site ID",
-  "API key": "Clé API"
+  "API key": "Clé API",
+  "Read current power flow": "Lire le flux de puissance actuel"
 }

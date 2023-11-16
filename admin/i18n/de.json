@@ -1,5 +1,6 @@
 {
   "instructions": "Geben Sie unten Ihre Wechselrichter-Standort-ID und den API-Schlüssel für die Solaredge-Überwachung ein. Die API hat ein Limit von 300 Anfragen/Tag, also stellen Sie die Planung nicht zu niedrig ein. Die Daten werden auf Solaredge-Seite nur alle 15 Minuten aktualisiert.",
   "Site ID": "Site ID",
-  "API key": "API-Schlüssel"
+  "API key": "API-Schlüssel",
+  "Read current power flow": "Aktuellen Leistungsfluss ablesen"
 }

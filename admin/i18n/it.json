@@ -1,5 +1,6 @@
 {
   "instructions": "Inserisci di seguito l'ID del sito dell'inverter e la chiave API di monitoraggio solaredge. L'API ha un limite di 300 richieste/giorno, quindi non impostare una programmazione troppo bassa. I dati vengono aggiornati solo ogni 15 minuti sul lato solaredge.",
   "Site ID": "ID sito",
-  "API key": "Chiave dell'API"
+  "API key": "Chiave dell'API",
+  "Read current power flow": "Leggere il flusso di potenza attuale"
 }

@@ -1,5 +1,6 @@
 {
   "instructions": "Wprowadź poniżej identyfikator witryny falownika i klucz interfejsu API monitorowania solaredge. Interfejs API ma limit 300 żądań dziennie, więc nie ustawiaj zbyt niskiego harmonogramu. Dane są aktualizowane tylko co 15 minut po stronie solaredge.",
   "Site ID": "Site ID",
-  "API key": "Klucz API"
+  "API key": "Klucz API",
+  "Read current power flow": "Odczytaj bieżący przepływ mocy"
 }

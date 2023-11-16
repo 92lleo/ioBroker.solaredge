@@ -1,5 +1,6 @@
 {
   "instructions": "Insira o ID do site do inversor e a chave de API de monitoramento solaredge abaixo. A API tem um limite de 300 requisições/dia, então não defina o agendamento muito baixo. Os dados são atualizados apenas a cada 15 minutos no lado solaredge.",
   "Site ID": "Site ID",
-  "API key": "Chave API"
+  "API key": "Chave API",
+  "Read current power flow": "Leia o fluxo de energia atual"
 }
