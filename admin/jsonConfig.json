@@ -22,6 +22,14 @@
       "sm": 12,
       "md": 6,
       "lg": 4
+    },
+    "currentPowerFlow": {
+      "newLine": true,
+      "type": "checkbox",
+      "label": "Read current power flow",
+      "sm": 12,
+      "md": 6,
+      "lg": 4
     }
   }
 }

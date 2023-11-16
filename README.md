@@ -31,6 +31,9 @@ Roadmap:
 	### **WORK IN PROGRESS**
 -->
 ## Changelog
+### **WORK IN PROGRESS**
+* (bluefox) Added the current power flow data
+
 ### 1.0.1 (2023-08-18)
 * (bluefox) Added JSON config and replaced `require` module with `axios`
 

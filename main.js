@@ -57,6 +57,12 @@ async function checkStatesCreationNeeded(){
     await checkStateCreationNeeded('lastYearData');
     await checkStateCreationNeeded('lastMonthData');
     await checkStateCreationNeeded('lastDayData');
+
+    if (adapter.config.currentPowerFlow) {
+        await checkStateCreationNeeded('currentFlowGrid');
+        await checkStateCreationNeeded('currentFlowLoad');
+        await checkStateCreationNeeded('currentFlowPv');
+    }
 }
 
 async function main() {
@@ -71,10 +77,8 @@ async function main() {
         adapter.log.error('siteid or api key not set')
     } else {
         // possible resources: overview, details, list
-        const resource = 'overview';
-
         // for some other resources, the url itself might change
-        const url = `https://monitoringapi.solaredge.com/site/${siteid}/${resource}.json?api_key=${apikey}`;
+        const url = `https://monitoringapi.solaredge.com/site/${siteid}/overview.json?api_key=${apikey}`;
 
         await checkStatesCreationNeeded();
 
@@ -148,6 +152,35 @@ async function main() {
                         role: 'value.energy.produced',
                         desc: 'last day energy in Wh'
                     });
+                    if (adapter.config.currentPowerFlow) {
+                        await adapter.createStateAsync('', siteid, 'currentFlowGrid', {
+                            name: 'Current flow: Grid',
+                            type: 'number',
+                            read: true,
+                            write: false,
+                            unit: 'kW',
+                            role: 'value.power.consumed',
+                            desc: 'Current usage from energy grid'
+                        });
+                        await adapter.createStateAsync('', siteid, 'currentFlowLoad', {
+                            name: 'Current flow: Load',
+                            type: 'number',
+                            read: true,
+                            write: false,
+                            unit: 'kW',
+                            role: 'value.power.consumed',
+                            desc: 'Current total usage'
+                        });
+                        await adapter.createStateAsync('', siteid, 'currentFlowPv', {
+                            name: 'Current flow: PV',
+                            type: 'number',
+                            read: true,
+                            write: false,
+                            unit: 'kW',
+                            role: 'value.power.produced',
+                            desc: 'Current production from PV'
+                        });
+                    }
 
                     createStates = false;
                 }
@@ -163,6 +196,23 @@ async function main() {
             } else {
                 adapter.log.warn(`Response has no valid content. Check your data and try again. ${response.statusCode}`);
             }
+
+            if (adapter.config.currentPowerFlow) {
+                const url = `https://monitoringapi.solaredge.com/site/${siteid}/currentPowerFlow.json?api_key=${apikey}`;
+
+                await checkStatesCreationNeeded();
+
+                const response = await axios(url);
+                if (response.data) {
+                    const powerFlow = response.data.siteCurrentPowerFlow;
+                    if (powerFlow) {
+                        await adapter.setStateChangedAsync(`${siteid}.currentFlowGrid`, powerFlow.GRID ? powerFlow.GRID.currentPower : 0, true);
+                        await adapter.setStateChangedAsync(`${siteid}.currentFlowLoad`, powerFlow.LOAD ? powerFlow.LOAD.currentPower : 0, true);
+                        await adapter.setStateChangedAsync(`${siteid}.currentFlowPv`, powerFlow.PV ? powerFlow.PV.currentPower : 0, true);
+                    }
+                }
+            }
+
 
             adapter.log.debug('Done, stopping...');
             adapter.stop();
