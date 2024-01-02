@@ -13,6 +13,7 @@
 **Tests:**: [![Travis-CI](http://img.shields.io/travis/92lleo/ioBroker.solaredge/master.svg)](https://travis-ci.org/92lleo/ioBroker.solaredge)
 
 ## solaredge adapter for ioBroker
+# Adapter is moved to community: https://github.com/iobroker-community-adapters/ioBroker.solaredge #
 
 Get data from solaredge monitoring portal.
 Currently, only the /overview data point is used to get the current power and day/month/year/lifetime energy readings.
